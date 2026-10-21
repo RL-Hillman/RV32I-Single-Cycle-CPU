@@ -237,6 +237,7 @@ This test demonstrates the processor's ability to **integrate and execute custom
    - `1'b1` – Custom SIMD SAD4 instructio.
 5. **Run the Simulation:** Select **Run Behavioral Simulation** and inspect the simulation console for the test results. Restart the simulation after changing the memory contents or testbench configuration.
 
+
 | Test | Simulation top | Memory image | Testbench setting |
 |---|---|---|---|
 | Sort & statistics | `tb_sort_and_statistics` | [`sort_and_statistics.mem`](testbenches/instruction_memory/sort_and_statistics.mem) | none |
@@ -245,6 +246,7 @@ This test demonstrates the processor's ability to **integrate and execute custom
 | Custom SAD on CPU | `tb_sad_cpu` | [`SAD_Custom.mem`](testbenches/instruction_memory/SAD_Custom.mem) | `USE_CUSTOM_SAD = 1'b1` |
 
 > **Important:** The testbench selection **does not automatically change** which `.mem` file `$readmemh` loads. All supplied memory images contain byte values in little-endian order, one byte per memory entry.
+
 
 ## Repository Structure
 
