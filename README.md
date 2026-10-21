@@ -131,7 +131,7 @@ The following example illustrates the encoding of the implemented SAD4 instructi
 5. **Execute:** The ALU activates the SIMD SAD unit, which computes four absolute differences in parallel and sums them.
 6. **Writeback:** The 32-bit result is written to register `x3`.
 
-#### SIMD SAD4 Implementation
+### SIMD SAD4 Implementation
 
 As an example of a custom instruction, the processor implements **SIMD SAD4 (Sum of Absolute Differences)**, commonly used in image comparison, block matching, and motion estimation.
 
@@ -159,8 +159,6 @@ flowchart TB
 ```
 
 The maximum SAD value is **1020** (`4 × 255`), requiring a 10-bit result before zero-extension to the 32-bit destination register.
-
-The instruction uses `CUSTOM_0` (`0x0B`) with `funct3 = 000`. In the supplied encoded example, `funct7 = 0000000`, although the current control logic selects SAD without checking `funct7`.
 
 ---
 
