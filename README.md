@@ -57,15 +57,6 @@ flowchart LR
 
 *Functional overview based on `top.sv`. Some control signals and direct connections are omitted for readability.*
 
-### How an instruction executes
-
-The following example shows `ADD x3, x1, x2` passing through the CPU. **The diagram describes logical data flow, not separate clock cycles.**
-
-![ADD instruction execution in a single-cycle CPU](docs/add_instruction_flow.png)
-
-- **Fetch & decode:** instruction memory supplies the 32-bit instruction; `decode` extracts its operands and fields.
-- **Execute:** register values from `x1` and `x2` feed the ALU; the control unit selects addition.
-- **Writeback & PC:** on the rising edge, `x3` receives the sum and the PC advances by four bytes.
 
 ### RTL modules
 
@@ -258,4 +249,13 @@ RV32I-Single-Cycle-CPU/
     └── sad_custom_result.png
 ```
 
+### How an instruction executes
+
+The following example shows `ADD x3, x1, x2` passing through the CPU. **The diagram describes logical data flow, not separate clock cycles.**
+
+![ADD instruction execution in a single-cycle CPU](docs/add_instruction_flow.png)
+
+- **Fetch & decode:** instruction memory supplies the 32-bit instruction; `decode` extracts its operands and fields.
+- **Execute:** register values from `x1` and `x2` feed the ALU; the control unit selects addition.
+- **Writeback & PC:** on the rising edge, `x3` receives the sum and the PC advances by four bytes.
 **Scope and limitations:** This is an **RV32I-based educational implementation**, not a complete ISA-compliance-certified RISC-V processor. The source supports the documented integer subset and custom SAD operation; it does not implement system/CSR instructions, traps/exceptions, `FENCE`, or privilege modes. Alignment/out-of-range memory accesses are not handled through a trap mechanism. The repository demonstrates RTL behavior and simulation, **not** post-synthesis timing or FPGA resource utilization.
