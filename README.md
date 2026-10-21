@@ -34,9 +34,9 @@ The processor uses **combinational logic** to execute instructions within each c
 
 ### Architecture Overview
 
-![RV32I Single-Cycle Processor Datapath and Control Architecture](docs/rv32i_single_cycle_datapath.png)
+The following diagram illustrates the datapath and control architecture of the RV32I single-cycle processor, including instruction fetch, decoding, register file, ALU, memory access, branch control, and writeback.
 
-*The diagram illustrates the main datapath and control connections of the RV32I single-cycle processor.*
+![RV32I Single-Cycle Processor Datapath and Control Architecture](docs/rv32i_single_cycle_datapath.png)
 
 
 ### RTL Modules
