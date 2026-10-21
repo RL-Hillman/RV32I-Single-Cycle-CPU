@@ -31,62 +31,13 @@ During each clock cycle, the processor fetches an instruction, decodes it, reads
 
 The processor uses **combinational logic** to execute instructions within each clock cycle, while **sequential logic** updates the architectural state at the rising clock edge.
 
+
 ### Architecture Overview
 
-```mermaid
-flowchart LR
-    PC["Program Counter"]
-    FETCH["Fetch"]
-    IMEM["Instruction Memory"]
-    DEC["Decode"]
-    CTRL["Control Unit"]
-    RF["Register File"]
-    IMM["Immediate"]
-    MUX["Operand MUXes"]
-    ALU["ALU + SIMD SAD"]
-    DMEM["Data Memory"]
-    WB["Writeback MUX"]
-    BR["Branch Control"]
-    NEXT["Next PC MUX"]
+![RV32I Single-Cycle Processor Datapath and Control Architecture](docs/rv32i_single_cycle_datapath.png)
 
-    PC -->|"PC [31:0]"| FETCH
-    FETCH -->|"Address + Read Enable"| IMEM
-    IMEM -->|"Instruction [31:0]"| FETCH
-    FETCH -->|"Fetched Instruction"| DEC
+*The diagram illustrates the main datapath and control connections of the RV32I single-cycle processor.*
 
-    DEC -->|"Opcode, Funct, Type"| CTRL
-    DEC -->|"rs1, rs2, rd Addresses"| RF
-    DEC -->|"Immediate [31:0]"| IMM
-
-    RF -->|"rs1 / rs2 Data"| MUX
-    IMM -->|"Immediate"| MUX
-    PC -->|"PC"| MUX
-    CTRL -.->|"Operand Select"| MUX
-
-    MUX -->|"ALU Operands"| ALU
-    CTRL -.->|"ALU Operation"| ALU
-
-    ALU -->|"Memory Address"| DMEM
-    RF -->|"Store Data (rs2)"| DMEM
-    CTRL -.->|"Memory Control"| DMEM
-
-    ALU -->|"ALU Result"| WB
-    DMEM -->|"Load Data"| WB
-    IMM -->|"Immediate"| WB
-    PC -->|"PC + 4"| WB
-    CTRL -.->|"Writeback Select / Enable"| WB
-    WB -->|"Write Data (rd)"| RF
-
-    RF -->|"rs1 / rs2 Data"| BR
-    DEC -.->|"Branch Type / Funct3"| BR
-    BR -->|"Branch Taken"| NEXT
-    ALU -->|"Target Address"| NEXT
-    PC -->|"PC + 4"| NEXT
-    CTRL -.->|"Jump Select"| NEXT
-    NEXT -->|"Next PC"| PC
-```
-
-*The diagram illustrates the main datapath and control connections of the processor. Solid arrows represent data flow, while dashed arrows represent control signals. Some internal connections are omitted for clarity.*
 
 ### RTL Modules
 
