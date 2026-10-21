@@ -174,40 +174,47 @@ The maximum SAD value is **1020** (`4 × 255`), requiring a 10-bit result before
 
 ## Simulation and Verification
 
-The repository includes three SystemVerilog testbenches for functional verification. The images below present the simulation results obtained during project development.
+The repository includes three SystemVerilog testbenches for functional verification, along with assembly (`.s`) and machine-code (`.mem`) files for the CPU test programs.
 
-### 1. Bubble Sort and Statistics - CPU test
+**Before running a CPU testbench, ensure that Instruction Memory is loaded with the corresponding `.mem` file.** The standalone SIMD SAD unit testbench does not require a machine-code file.
 
-[`tb_sort_and_statistics.sv`](testbenches/tb_sort_and_statistics.sv) executes the [`Sort and Statistics.s`](testbenches/assembly/Sort%20and%20Statistics.s) program. It writes eight integers to data memory, sorts them in ascending order, then checks the stored array, computed statistics, and result registers.
+### 1. Bubble Sort and Statistics – CPU Test
 
-| Test | Expected value |
-|---|---|
-| Sorted array | `[-42, -7, 0, 2, 11, 18, 51, 99]` |
-| Minimum / maximum | `-42` / `99` |
-| Sum | `132` |
-| Positive count | `5` |
+[`tb_sort_and_statistics.sv`](testbenches/tb_sort_and_statistics.sv) executes the [`Sort and Statistics.s`](testbenches/assembly/Sort%20and%20Statistics.s) program, which sorts eight integers in ascending order and calculates their minimum, maximum, sum, and positive count.
+
+This test demonstrates the processor's ability to execute a complete program involving **nested loops, conditional branches, arithmetic operations, and memory access**, verifying the correct operation of the CPU's datapath and control logic.
 
 <p align="center">
-  <a href="docs/sort_statistics_result.png"><img src="docs/sort_statistics_result.png" alt="Bubble Sort and Statistics simulation results" width="460"></a>
+  <a href="docs/sort_statistics_result.png">
+    <img src="docs/sort_statistics_result.png" alt="Bubble Sort and Statistics simulation results" width="460">
+  </a>
 </p>
 
-### 2. SIMD SAD4 — standalone unit test
+### 2. SIMD SAD4 - standalone unit test
 
 [`tb_simd_sad4.sv`](testbenches/tb_simd_sad4.sv) contains the simulation top module **`tb_simd_sad`**. It exercises five cases: equal operands, the worked example, two maximum-difference orders, and a mixed-byte example. Expected results: `0`, `24`, `1020`, `1020`, and `40`. The test prints `PASS`/`FAIL` for each vector.
 
-### 3. SAD on the full CPU — standard vs. custom
 
-[`tb_sad_cpu.sv`](testbenches/tb_sad_cpu.sv) uses the same input operands for both programs and checks that `x3 = 24`. Its `USE_CUSTOM_SAD` local parameter selects the corresponding PC measurement window; the **program memory image must also be selected separately**.
 
-| Standard RV32I assembly | Custom SAD instruction |
+### 3. SAD on the Full CPU – Standard vs. Custom Instruction
+
+[`tb_sad_cpu.sv`](testbenches/tb_sad_cpu.sv) compares two implementations of the same SAD4 calculation: one using standard RV32I instructions and the other using the custom SIMD SAD4 instruction.
+
+Both programs use identical input operands, allowing the testbench to verify the correctness of the results and compare the CPU cycles required by each implementation.
+
+| Standard RV32I Implementation | Custom SIMD SAD4 Instruction |
 |:---:|:---:|
 | [![Standard RV32I SAD simulation](docs/sad_standard_result.png)](docs/sad_standard_result.png) | [![Custom SAD CPU simulation](docs/sad_custom_result.png)](docs/sad_custom_result.png) |
-| **23 calculation cycles** | **1 calculation cycle** |
+| **23 cycles** | **1 cycle** |
 
-The custom implementation uses **23× fewer counted instruction cycles** for this test's SAD calculation (approximately **95.7% fewer cycles**). Both produce a result of `24`.
+The custom instruction reduces the calculation from **23 cycles to just 1 cycle**, achieving a **23× reduction in instruction cycles (95.7% fewer cycles)** while producing the same result.
 
-> **Measurement scope:** The testbench counts the SAD routine's dynamic instruction cycles, excluding operand initialization. This is **not** a measured FPGA frequency, elapsed-time benchmark, synthesis result, or power comparison. The SAD CPU test prints `PASS`/`FAIL` on result mismatch (with `$fatal` for timeout); the standalone SAD unit test also prints `PASS`/`FAIL`. The sorting test uses `$fatal` for failed checks.
+This test demonstrates the processor's ability to **integrate and execute custom instructions within its existing single-cycle datapath**, enabling application-specific hardware acceleration while maintaining correct execution.
 
+**Test Configuration:**
+- Set the `USE_CUSTOM_SAD` local parameter in the testbench to select the corresponding measurement configuration.
+- Load the matching `.mem` program into Instruction Memory before running the simulation.
+- Cycle measurements cover only the SAD calculation, excluding operand initialization.
 ---
 
 ## Running the Project
@@ -265,14 +272,3 @@ RV32I-Single-Cycle-CPU/
     ├── sad_standard_result.png
     └── sad_custom_result.png
 ```
-
-### How an instruction executes
-
-The following example shows `ADD x3, x1, x2` passing through the CPU. **The diagram describes logical data flow, not separate clock cycles.**
-
-![ADD instruction execution in a single-cycle CPU](docs/add_instruction_flow.png)
-
-- **Fetch & decode:** instruction memory supplies the 32-bit instruction; `decode` extracts its operands and fields.
-- **Execute:** register values from `x1` and `x2` feed the ALU; the control unit selects addition.
-- **Writeback & PC:** on the rising edge, `x3` receives the sum and the PC advances by four bytes.
-**Scope and limitations:** This is an **RV32I-based educational implementation**, not a complete ISA-compliance-certified RISC-V processor. The source supports the documented integer subset and custom SAD operation; it does not implement system/CSR instructions, traps/exceptions, `FENCE`, or privilege modes. Alignment/out-of-range memory accesses are not handled through a trap mechanism. The repository demonstrates RTL behavior and simulation, **not** post-synthesis timing or FPGA resource utilization.
