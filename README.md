@@ -216,17 +216,16 @@ This test demonstrates the processor's ability to **integrate and execute custom
 - Set the `USE_CUSTOM_SAD` local parameter in the testbench to select the corresponding measurement configuration.
 - Load the matching `.mem` program into Instruction Memory before running the simulation.
 - Cycle measurements cover only the SAD calculation, excluding operand initialization.
----
 
 ## Running the Project
 
-**Environment:** A Vivado project with XSim and SystemVerilog support. These instructions describe simulation, not a board programming flow.
+**Environment:** A Vivado project with SystemVerilog support. These instructions describe simulation, not a board programming flow.
 
-1. Add all files in [`rtl/`](rtl/) to **Design Sources**. Ensure [`rv32i_pkg.sv`](rtl/rv32i_pkg.sv) is compiled before modules that import it.
+1. Add all files in [`rtl/`](rtl/) to **Design Sources**.
 2. Add the testbench of interest from [`testbenches/`](testbenches/) to **Simulation Sources** and select its **actual module name** as the simulation top.
 3. For a CPU test, choose the matching image below. [`Instruction_Memory.sv`](rtl/Instruction_Memory.sv) calls `$readmemh("instruction_memory.mem", memory)` — a filename that is **not supplied directly** in the repository. Copy the selected `.mem` file under that exact name and make it available in XSim's simulation working directory (for example as a Vivado memory initialization source).
 4. For the SAD CPU comparison, also set `USE_CUSTOM_SAD` in [`tb_sad_cpu.sv`](testbenches/tb_sad_cpu.sv) to the matching value. **Relaunch the simulation** after switching programs.
-5. Run **Behavioral Simulation** and inspect the XSim console output.
+5. Run **Behavioral Simulation** and inspect the console output.
 
 | Test | Simulation top | Memory image | Testbench setting |
 |---|---|---|---|
