@@ -2,7 +2,7 @@
 
 This project implements a **32-bit, single-cycle RISC-V processor** using **SystemVerilog**. The CPU fetches and decodes instructions, reads operands from its register file, executes arithmetic or logic operations, performs load/store accesses, and updates the program counter.
 
-The processor follows a **single-cycle architecture**: the combinational datapath evaluates the active instruction between clock edges, and architectural state is updated at the clock edge. 
+The processor follows a **single-cycle architecture**, executing each instruction within one clock cycle. Instruction processing is performed through combinational logic, while the processor's architectural state is updated at the active clock edge.
 
 Beyond conventional RV32I instruction groups, the CPU integrates a **custom four-lane SIMD Sum of Absolute Differences (SAD)** operation in the ALU. This extension processes four unsigned 8-bit values from each 32-bit source operand in parallel and returns their sum in one CPU instruction.
 
