@@ -21,7 +21,6 @@ The project includes assembly test programs, pre-encoded instruction memory file
 | Data memory | Byte-addressable; 64 bytes by default |
 | Byte ordering | Little-endian |
 | Custom extension | `SAD` (four unsigned 8-bit lanes packed into two 32-bit operands) |
-| Verification | SystemVerilog testbenches and Vivado/XSim simulation results |
 ---
 
 ## Processor Architecture
