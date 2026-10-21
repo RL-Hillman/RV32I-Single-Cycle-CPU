@@ -131,7 +131,7 @@ The following example illustrates the encoding of the implemented SAD4 instructi
 5. **Execute:** The ALU activates the SIMD SAD unit, which computes four absolute differences in parallel and sums them.
 6. **Writeback:** The 32-bit result is written to register `x3`.
 
-### SIMD SAD4 Implementation
+## SIMD SAD4 Implementation
 
 As an example of a custom instruction, the processor implements **SIMD SAD4 (Sum of Absolute Differences)**, commonly used in image comparison, block matching, and motion estimation.
 
