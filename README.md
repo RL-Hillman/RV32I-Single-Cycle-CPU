@@ -1,12 +1,23 @@
 # RV32I Single-Cycle CPU
 
-This project implements a **32-bit, single-cycle RISC-V processor** using **SystemVerilog**. The CPU fetches and decodes instructions, reads operands from its register file, executes arithmetic or logic operations, performs load/store accesses, and updates the program counter.
+This project implements a **32-bit RISC-V processor** using
+**SystemVerilog**, based on the RV32I instruction set architecture.
 
-The processor follows a **single-cycle architecture**, executing each instruction within one clock cycle. Instruction processing is performed through combinational logic, while the processor's architectural state is updated at the active clock edge.
+The processor follows a **single-cycle architecture**, executing
+each instruction within one clock cycle. Instruction processing
+is performed through combinational logic, while the processor's
+architectural state is updated at the active clock edge.
 
-Beyond conventional RV32I instruction groups, the CPU integrates a **custom four-lane SIMD Sum of Absolute Differences (SAD)** operation in the ALU. This extension processes four unsigned 8-bit values from each 32-bit source operand in parallel and returns their sum in one CPU instruction.
+In addition to the supported RV32I instructions, the processor
+integrates a **custom four-lane SIMD Sum of Absolute Differences
+(SAD) instruction**, implemented as a dedicated hardware unit
+within the ALU.
 
-The project includes assembly test programs, pre-encoded instruction memory files, and testbenches that check sorting/statistics and compare standard RV32I SAD code against the custom instruction.
+The project includes RISC-V assembly programs, pre-encoded
+instruction memory files, and SystemVerilog testbenches for
+functional verification, including sorting, statistical
+calculations, and a comparison between standard RV32I
+instructions and the custom SAD implementation.
 
 ## Key Features
 
@@ -17,10 +28,10 @@ The project includes assembly test programs, pre-encoded instruction memory file
 | Register file | 32 registers × 32 bits; `x0` is always zero |
 | Instruction size | 32 bits |
 | Supported instruction groups | Arithmetic, comparisons, logic, shifts, loads/stores, branches, jumps, upper immediates |
-| Instruction memory | Byte-addressable; 256 bytes by default |
-| Data memory | Byte-addressable; 64 bytes by default |
+| Instruction memory |  Byte-addressable, parameterizable size; 256 bytes by default |
+| Data memory | Byte-addressable, parameterizable size; 64 bytes by default  |
 | Byte ordering | Little-endian |
-| Custom extension | `SAD` (four unsigned 8-bit lanes packed into two 32-bit operands) |
+| Custom extension | Four-lane SIMD SAD instruction |
 ---
 
 ## Processor Architecture
