@@ -277,7 +277,6 @@ RV32I-Single-Cycle-CPU/
     ├── logical_op.png
     ├── branch_op.png
     ├── load_store.png
-    ├── add_instruction_flow.png
     ├── sort_statistics_result.png
     ├── sad_standard_result.png
     └── sad_custom_result.png
