@@ -174,9 +174,9 @@ The maximum SAD value is **1020** (`4 × 255`), requiring a 10-bit result before
 
 ## Simulation and Verification
 
-The repository provides three SystemVerilog testbenches and saved XSim console-output images. The screenshots below are **results supplied with the project**; the RTL has not been independently re-simulated for this README.
+The repository includes three SystemVerilog testbenches for functional verification. The images below present the simulation results obtained during project development.
 
-### 1. Bubble Sort and Statistics — CPU test
+### 1. Bubble Sort and Statistics - CPU test
 
 [`tb_sort_and_statistics.sv`](testbenches/tb_sort_and_statistics.sv) executes the [`Sort and Statistics.s`](testbenches/assembly/Sort%20and%20Statistics.s) program. It writes eight integers to data memory, sorts them in ascending order, then checks the stored array, computed statistics, and result registers.
 
