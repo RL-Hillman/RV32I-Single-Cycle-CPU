@@ -272,7 +272,7 @@ RV32I-Single-Cycle-CPU/
 │   ├── assembly/               # Three source programs (.s)
 │   └── instruction_memory/     # Three byte-oriented images (.mem)
 └── docs/
-    ├── rv32i_encoding.png     # Instruction formats and encoding
+    ├── rv32i_encoding.png     
     ├── arithmetic_op.png
     ├── logical_op.png
     ├── branch_op.png
