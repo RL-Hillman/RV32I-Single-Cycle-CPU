@@ -73,7 +73,6 @@ The [`decode`](rtl/Decode.sv) module extracts `opcode`, `rd`, `rs1`, `rs2`, `fun
 
 ### Supported Instructions
 
-The tables provide a visual overview of the integer instructions implemented in this CPU. Click a table to see it at full resolution.
 
 | Arithmetic & comparisons | Logical operations & shifts |
 |:---:|:---:|
@@ -81,12 +80,6 @@ The tables provide a visual overview of the integer instructions implemented in 
 | **Branching & jumps** | **Load / store** |
 | [![Branch and jump operations reference](docs/branch_op.png)](docs/branch_op.png) | [![Load and store operations reference](docs/load_store.png)](docs/load_store.png) |
 
-| Category | Implemented mnemonics |
-|---|---|
-| Arithmetic and comparisons | `ADD`, `SUB`, `ADDI`, `SLT`, `SLTU`, `SLTI`, `SLTIU`, `LUI`, `AUIPC` |
-| Logic and shifts | `AND`, `OR`, `XOR`, `ANDI`, `ORI`, `XORI`, `SLL`, `SRL`, `SRA`, `SLLI`, `SRLI`, `SRAI` |
-| Branches and jumps | `BEQ`, `BNE`, `BLT`, `BGE`, `BLTU`, `BGEU`, `JAL`, `JALR` |
-| Loads and stores | `LB`, `LBU`, `LH`, `LHU`, `LW`, `SB`, `SH`, `SW` |
 
 **Behavior notes:** `SRA`/`SRAI` are arithmetic right shifts; register shifts use the low five bits of the shift amount. `BLT`/`BGE` are signed comparisons, while `BLTU`/`BGEU` are unsigned. `LB`/`LH` sign-extend; `LBU`/`LHU` zero-extend. `LD`, `SD`, and `LWU` are **not** RV32I instructions and are **not** implemented here. Where a reference-table illustration abbreviates an operation, the RTL is authoritative.
 
