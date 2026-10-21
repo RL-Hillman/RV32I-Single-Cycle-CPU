@@ -192,9 +192,7 @@ This test demonstrates the processor's ability to execute a complete program inv
 
 ### 2. SIMD SAD4 - standalone unit test
 
-[`tb_simd_sad4.sv`](testbenches/tb_simd_sad4.sv) contains the simulation top module **`tb_simd_sad`**. It exercises five cases: equal operands, the worked example, two maximum-difference orders, and a mixed-byte example. Expected results: `0`, `24`, `1020`, `1020`, and `40`. The test prints `PASS`/`FAIL` for each vector.
-
-
+[`tb_simd_sad4.sv`](testbenches/tb_simd_sad4.sv) exercises five cases: equal operands, the worked example, two maximum-difference orders, and a mixed-byte example. Expected results: `0`, `24`, `1020`, `1020`, and `40`. The test prints `PASS`/`FAIL` for each vector.
 
 ### 3. SAD on the Full CPU – Standard vs. Custom Instruction
 
