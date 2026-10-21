@@ -74,7 +74,7 @@ The following diagram illustrates the instruction formats and their binary encod
   </a>
 </p>
 
-The [`Decode`](rtl/Decode.sv) module extracts `opcode`, `rd`, `rs1`, `rs2`, `funct3`, and `funct7`, then generates the corresponding 32-bit immediate value.
+The [`Decode`](rtl/Decode.sv) module extracts `opcode`, `rd`, `rs1`, `rs2`, `funct3`,`funct7` and generates the corresponding 32-bit immediate value.
 
 ### Supported Instructions
 
