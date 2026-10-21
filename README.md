@@ -1,4 +1,4 @@
-# RV32I Single-Cycle CPU with Custom SIMD SAD Instruction
+# RV32I Single-Cycle CPU with Custom Instruction
 
 A **32-bit RISC-V-based single-cycle processor** written in **SystemVerilog**, with a custom four-lane **Sum of Absolute Differences (SAD)** instruction. The repository contains the RTL, assembly test programs, machine-code memory images, and simulation testbenches.
 
