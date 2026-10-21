@@ -21,7 +21,7 @@ The project includes RISC-V assembly programs, pre-encoded instruction memory fi
 | Data memory | Byte-addressable, parameterizable size; 64 bytes by default  |
 | Byte ordering | Little-endian |
 | Custom extension | Four-lane SIMD SAD instruction |
----
+
 
 ## Processor Architecture
 
