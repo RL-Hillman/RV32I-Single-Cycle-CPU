@@ -131,15 +131,26 @@ The following example illustrates the encoding of the implemented SAD4 instructi
 5. **Execute:** The ALU activates the SIMD SAD unit, which computes four absolute differences in parallel and sums them.
 6. **Writeback:** The 32-bit result is written to register `x3`.
 
+
 ## SIMD SAD4 Implementation
 
 As an example of a custom instruction, the processor implements **SIMD SAD4 (Sum of Absolute Differences)**, commonly used in image comparison, block matching, and motion estimation.
 
-Two 32-bit registers contain four **unsigned 8-bit values** each. The dedicated hardware computes four absolute differences **in parallel** and sums them:
+Two 32-bit registers each contain four **unsigned 8-bit values**. The dedicated hardware computes four absolute differences **in parallel**:
 
 $$
-\mathrm{SAD4}(A,B)=\sum_{i=0}^{3}|A_i-B_i|
+d_i = |A_i - B_i|, \qquad i = 0,1,2,3
 $$
+
+The four differences are then combined using a **two-level adder tree**:
+
+$$
+\mathrm{SAD4} = (d_0 + d_1) + (d_2 + d_3)
+$$
+
+This structure allows the two intermediate sums to be calculated simultaneously, reducing the addition depth from three levels to two compared to a serial addition chain.
+
+The adder tree was chosen to **minimize the combinational delay**, helping the complete SAD4 operation meet the timing requirements of the single-cycle processor.
 
 ```mermaid
 flowchart TB
@@ -160,7 +171,6 @@ flowchart TB
 
 The maximum SAD value is **1020** (`4 × 255`), requiring a 10-bit result before zero-extension to the 32-bit destination register.
 
----
 
 ## Simulation and Verification
 
