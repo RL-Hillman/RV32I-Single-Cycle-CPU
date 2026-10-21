@@ -58,38 +58,61 @@ The processor is organized into modular SystemVerilog components, each responsib
 | [`rv32i_pkg.sv`](rtl/rv32i_pkg.sv) | Defines shared instruction opcodes, operation types, and control enumerations |
 
 
-
 ## Instruction Set
 
 ### Instruction Encoding
 
-The processor decodes the six instruction formats **R, I, S, B (SB), U, and J (UJ)**. The diagram below is the repository's original [`rv32i_encoding.png`](docs/rv32i_encoding.png), shown directly rather than hidden in a collapsed section.
+The processor decodes six standard RV32I instruction formats: **R, I, S, B (SB), U, and J (UJ)**.
+
+Each instruction is 32 bits wide and contains fields such as the opcode, register addresses, function codes, and immediate values.
+
+The following diagram illustrates the instruction formats and their binary encodings, including the custom SAD4 instruction.
 
 <p align="center">
-  <a href="docs/rv32i_encoding.png"><img src="docs/rv32i_encoding.png" alt="RV32I instruction encodings and field layouts" width="760"></a>
+  <a href="docs/rv32i_encoding.png">
+    <img src="docs/rv32i_encoding.png" alt="RV32I instruction encodings and field layouts" width="760">
+  </a>
 </p>
 
-The [`decode`](rtl/Decode.sv) module extracts `opcode`, `rd`, `rs1`, `rs2`, `funct3`, and `funct7`, then builds the selected immediate (with sign extension and low-bit placement as needed). The additional `CUSTOM_0` opcode identifies the project-specific SAD format.
+The [`Decode`](rtl/Decode.sv) module extracts `opcode`, `rd`, `rs1`, `rs2`, `funct3`, and `funct7`, then generates the corresponding 32-bit immediate value.
 
 ### Supported Instructions
 
+The processor supports arithmetic, logical operations, shifts, branches, jumps, and memory access instructions.
 
-| Arithmetic & comparisons | Logical operations & shifts |
+| Arithmetic & Comparisons | Logical Operations & Shifts |
 |:---:|:---:|
-| [![Arithmetic operations reference](docs/arithmetic_op.png)](docs/arithmetic_op.png) | [![Logical operations reference](docs/logical_op.png)](docs/logical_op.png) |
-| **Branching & jumps** | **Load / store** |
-| [![Branch and jump operations reference](docs/branch_op.png)](docs/branch_op.png) | [![Load and store operations reference](docs/load_store.png)](docs/load_store.png) |
+| [![Arithmetic operations](docs/arithmetic_op.png)](docs/arithmetic_op.png) | [![Logical operations](docs/logical_op.png)](docs/logical_op.png) |
+| **Branches & Jumps** | **Load & Store** |
+| [![Branch operations](docs/branch_op.png)](docs/branch_op.png) | [![Load and store operations](docs/load_store.png)](docs/load_store.png) |
 
+**Instruction Behavior Notes:**
 
-**Behavior notes:** `SRA`/`SRAI` are arithmetic right shifts; register shifts use the low five bits of the shift amount. `BLT`/`BGE` are signed comparisons, while `BLTU`/`BGEU` are unsigned. `LB`/`LH` sign-extend; `LBU`/`LHU` zero-extend. `LD`, `SD`, and `LWU` are **not** RV32I instructions and are **not** implemented here. Where a reference-table illustration abbreviates an operation, the RTL is authoritative.
+- **Arithmetic shifts:** `SRA` and `SRAI` preserve the sign bit. Shift amounts use the lower five bits.
+- **Comparisons:** `BLT`/`BGE` are signed, while `BLTU`/`BGEU` are unsigned.
+- **Memory access:** `LB`/`LH` sign-extend; `LBU`/`LHU` zero-extend.
+- **Instruction scope:** RV64I instructions such as `LD`, `SD`, and `LWU` are not implemented.
 
----
+### Custom Instructions
 
-## Custom SIMD SAD Instruction
+The processor supports custom instruction extensions using the RISC-V **`CUSTOM_0` opcode (`0x0B`)**.
 
-The custom instruction accelerates **Sum of Absolute Differences (SAD)**, a building block used in image comparison, block matching, and motion estimation.
+Custom instructions reuse the existing R-type register fields (`rs1`, `rs2`, and `rd`).
 
-Two 32-bit registers contain four **unsigned 8-bit values** each. The hardware computes their four absolute differences **in parallel** and sums them:
+The `funct3` field identifies the custom operation:
+
+- `funct3 = 000`: SIMD SAD4 (implemented).
+- `funct3 = 001–111`: Reserved for future custom instructions.
+
+The 7-bit `funct7` field is currently unused for custom instruction selection and provides additional flexibility for future extensions.
+
+This architecture allows additional specialized instructions to be implemented without changing the existing 32-bit instruction format.
+
+#### SIMD SAD4 Implementation
+
+As an example of a custom instruction, the processor implements **SIMD SAD4 (Sum of Absolute Differences)**, commonly used in image comparison, block matching, and motion estimation.
+
+Two 32-bit registers contain four **unsigned 8-bit values** each. The dedicated hardware computes four absolute differences **in parallel** and sums them:
 
 $$
 \mathrm{SAD4}(A,B)=\sum_{i=0}^{3}|A_i-B_i|
@@ -112,25 +135,12 @@ flowchart TB
     SUM --> RD["Zero-extend to 32 bits → rd"]
 ```
 
-The maximum SAD value is **1020** (`4 × 255`), so the internal sum uses 10 bits before being zero-extended to the 32-bit destination.
+The maximum SAD value is **1020** (`4 × 255`), requiring a 10-bit result before zero-extension to the 32-bit destination register.
 
-### Custom encoding and example
-
-The instruction uses the **`CUSTOM_0` opcode (`0x0B`)**, `funct3 = 000`, and the ordinary `rd`/`rs1`/`rs2` register fields. In the supplied encoded example, `funct7 = 0000000`; the current control logic selects SAD from the custom opcode and `funct3`, **without checking `funct7`**.
-
-```asm
-lui   x1, 0x64785
-addi  x1, x1, 0x032     # x1 = 0x64785032
-
-lui   x2, 0x69766
-addi  x2, x2, -204      # x2 = 0x69765F34
-
-.word 0x0020818B       # SAD x3, x1, x2 (custom encoding)
-```
-
-From the corresponding byte pairs, the differences are `2`, `15`, `2`, and `5`, giving **SAD = 24**. See the full [`custom assembly program`](testbenches/assembly/SAD_Custom_Instruction.s) and [`simd_sad.sv`](rtl/simd_sad.sv).
+The instruction uses `CUSTOM_0` (`0x0B`) with `funct3 = 000`. In the supplied encoded example, `funct7 = 0000000`, although the current control logic selects SAD without checking `funct7`.
 
 ---
+
 
 ## Simulation and Verification
 
