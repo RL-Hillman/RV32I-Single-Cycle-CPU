@@ -25,53 +25,55 @@ The project includes RISC-V assembly programs, pre-encoded instruction memory fi
 
 ## Processor Architecture
 
-The design is centered on [`rtl/top.sv`](rtl/top.sv), which connects the functional blocks and updates the program counter (`PC`). The **datapath is not pipelined**: instruction fetch, decode, register reads, ALU operations, and optional memory reads form a combinational path; the PC, register writes, and memory stores update on the rising clock edge.
+The processor is implemented as a **single-cycle datapath**, with its main components integrated in [`top.sv`](rtl/top.sv).
+
+During each clock cycle, the processor fetches an instruction, decodes it, reads the required operands, performs the operation, and determines the next program counter (`PC`). Depending on the instruction, the result may be written to the register file or stored in data memory.
+
+The architecture combines **combinational logic** for instruction processing with **sequential logic** for updating the processor's state at the rising clock edge.
+
+### Architecture Overview
 
 ```mermaid
 flowchart LR
-    PC["PC"] --> F["Fetch"]
-    F --> IM["Instruction Memory"]
-    IM --> D["Decode"]
-    D --> CU["Control Unit"]
-    D --> RF["Register File"]
-    D --> IMM["Immediate"]
-    RF --> O["Operand MUXes"]
-    IMM --> O
-    PC --> O
-    CU -.-> O
-    O --> ALU["ALU + SIMD SAD"]
+    PC["Program Counter (PC)"] --> FETCH["Instruction Fetch"]
+    FETCH --> DECODE["Instruction Decode"]
+    DECODE --> RF["Register File"]
+    DECODE --> CTRL["Control Unit"]
+
+    RF --> ALU["ALU + Custom SIMD SAD"]
+    CTRL -.-> ALU
+
     ALU --> DM["Data Memory"]
-    RF --> DM
-    ALU --> WB["Writeback MUX"]
+    ALU --> WB["Writeback"]
     DM --> WB
-    IMM --> WB
-    PC --> WB
     WB --> RF
-    RF --> BC["Branch Control"]
-    BC --> NEXT["Next-PC MUX"]
+
+    RF --> BR["Branch Control"]
+    BR --> NEXT["Next PC Selection"]
     ALU --> NEXT
-    PC --> NEXT
-    CU -.-> NEXT
+    CTRL -.-> NEXT
     NEXT --> PC
 ```
 
-*Functional overview based on `top.sv`. Some control signals and direct connections are omitted for readability.*
+*Simplified architectural overview. Control signals and selected datapath connections are omitted for clarity.*
 
+### RTL Modules
 
-### RTL modules
+The processor is organized into modular SystemVerilog components, each responsible for a specific function within the datapath or control logic.
 
-| Module | Implementation role |
+| Module | Description |
 |---|---|
-| [`top.sv`](rtl/top.sv) | Integrates the datapath; implements PC update, operand and writeback selection |
-| [`fetch.sv`](rtl/fetch.sv) · [`Instruction_Memory.sv`](rtl/Instruction_Memory.sv) | Instruction fetch and byte-oriented program memory |
-| [`Decode.sv`](rtl/Decode.sv) · [`control.sv`](rtl/control.sv) | Instruction formats, immediates, and control signals |
-| [`register_file.sv`](rtl/register_file.sv) | 32 registers, two read ports, one synchronous write port; `x0` is zero |
-| [`alu.sv`](rtl/alu.sv) · [`simd_sad.sv`](rtl/simd_sad.sv) | Integer ALU plus four parallel SAD lanes |
-| [`branch_control.sv`](rtl/branch_control.sv) | Signed and unsigned branch-condition checks |
-| [`data_memory.sv`](rtl/data_memory.sv) | Little-endian byte, halfword, and word loads/stores |
-| [`rv32i_pkg.sv`](rtl/rv32i_pkg.sv) | Shared opcode, ALU-operation, memory-size, and writeback types |
-
-**Memory defaults:** 256-byte instruction memory and 64-byte data memory; both are byte-addressable and little-endian. These are the parameter defaults in the provided RTL.
+| [`top.sv`](rtl/top.sv) | Top-level integration of the processor, including datapath connections, multiplexers, and PC updates |
+| [`fetch.sv`](rtl/fetch.sv) | Manages instruction fetching and interfaces with instruction memory |
+| [`Instruction_Memory.sv`](rtl/Instruction_Memory.sv) | Stores program instructions and provides the instruction corresponding to the current PC |
+| [`Decode.sv`](rtl/Decode.sv) | Decodes instruction fields, identifies instruction formats, and generates immediate values |
+| [`control.sv`](rtl/control.sv) | Generates control signals for ALU operations, memory access, register writeback, and PC selection |
+| [`register_file.sv`](rtl/register_file.sv) | Implements 32 general-purpose registers with two asynchronous read ports and one synchronous write port |
+| [`alu.sv`](rtl/alu.sv) | Performs arithmetic, logical, comparison, shift, and custom SAD operations |
+| [`simd_sad.sv`](rtl/simd_sad.sv) | Implements the custom four-lane SIMD SAD computation |
+| [`branch_control.sv`](rtl/branch_control.sv) | Evaluates branch conditions using signed and unsigned comparisons |
+| [`data_memory.sv`](rtl/data_memory.sv) | Supports byte, halfword, and word memory accesses |
+| [`rv32i_pkg.sv`](rtl/rv32i_pkg.sv) | Defines shared instruction opcodes, operation types, and control enumerations |
 
 ---
 
