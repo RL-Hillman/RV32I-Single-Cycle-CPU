@@ -62,7 +62,7 @@ The processor is organized into modular SystemVerilog components, each responsib
 
 ### Instruction Encoding
 
-The processor decodes six standard RV32I instruction formats: **R, I, S, B (SB), U, and J (UJ)**.
+The processor supports six standard RV32I instruction formats: **R, I, S, B (SB), U, and J (UJ)**, along with **custom instructions** using the `CUSTOM_0` opcode (`0x0B`), allowing future instruction set extensions.
 
 Each instruction is 32 bits wide and contains fields such as the opcode, register addresses, function codes, and immediate values.
 
@@ -78,7 +78,7 @@ The [`Decode`](rtl/Decode.sv) module extracts `opcode`, `rd`, `rs1`, `rs2`, `fun
 
 ### Supported Instructions
 
-The processor supports arithmetic, logical operations, shifts, branches, jumps, and memory access instructions.
+The processor supports arithmetic, logical operations, shifts, branches, jumps, and memory access instructions. The following diagrams provide a visual reference of the supported instructions, organized into four categories:
 
 | Arithmetic & Comparisons | Logical Operations & Shifts |
 |:---:|:---:|
@@ -86,27 +86,20 @@ The processor supports arithmetic, logical operations, shifts, branches, jumps, 
 | **Branches & Jumps** | **Load & Store** |
 | [![Branch operations](docs/branch_op.png)](docs/branch_op.png) | [![Load and store operations](docs/load_store.png)](docs/load_store.png) |
 
-**Instruction Behavior Notes:**
-
-- **Arithmetic shifts:** `SRA` and `SRAI` preserve the sign bit. Shift amounts use the lower five bits.
-- **Comparisons:** `BLT`/`BGE` are signed, while `BLTU`/`BGEU` are unsigned.
-- **Memory access:** `LB`/`LH` sign-extend; `LBU`/`LHU` zero-extend.
-- **Instruction scope:** RV64I instructions such as `LD`, `SD`, and `LWU` are not implemented.
-
 ### Custom Instructions
 
-The processor supports custom instruction extensions using the RISC-V **`CUSTOM_0` opcode (`0x0B`)**.
+The RV32I processor was extended to support custom instructions using the RISC-V **`CUSTOM_0` opcode (`0x0B`)**.
 
-Custom instructions reuse the existing R-type register fields (`rs1`, `rs2`, and `rd`).
+In this implementation, custom instructions follow the R-type instruction format, where `rs1` and `rs2` specify the source registers and `rd` specifies the destination register.
 
-The `funct3` field identifies the custom operation:
+The `funct3` field is used to distinguish between custom operations:
 
 - `funct3 = 000`: SIMD SAD4 (implemented).
 - `funct3 = 001–111`: Reserved for future custom instructions.
 
-The 7-bit `funct7` field is currently unused for custom instruction selection and provides additional flexibility for future extensions.
+The 7-bit `funct7` field is currently unused for custom instruction selection but can be incorporated into the decoding logic to support additional operations in the future.
 
-This architecture allows additional specialized instructions to be implemented without changing the existing 32-bit instruction format.
+This design allows the processor to be extended with new specialized instructions while preserving the existing 32-bit instruction format.
 
 #### SIMD SAD4 Implementation
 
@@ -140,7 +133,6 @@ The maximum SAD value is **1020** (`4 × 255`), requiring a 10-bit result before
 The instruction uses `CUSTOM_0` (`0x0B`) with `funct3 = 000`. In the supplied encoded example, `funct7 = 0000000`, although the current control logic selects SAD without checking `funct7`.
 
 ---
-
 
 ## Simulation and Verification
 
