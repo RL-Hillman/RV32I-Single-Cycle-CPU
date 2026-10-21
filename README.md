@@ -195,7 +195,7 @@ This test demonstrates the processor's ability to execute a complete program inv
 [`tb_simd_sad4.sv`](testbenches/tb_simd_sad4.sv) independently verifies the functionality of the **SIMD SAD4 hardware unit**.
 The testbench checks that the unit correctly computes the sum of four absolute differences using five test cases: identical operands, a standard calculation example, maximum differences in both operand orders, and mixed-byte values.
 
-The expected results are `0`, `24`, `1020`, `1020`, and `40`, respectively. Each test reports `PASS` or `FAIL`, confirming whether the SIMD SAD4 unit produces the expected result
+The expected results are `0`, `24`, `1020`, `1020`, and `40`, respectively. Each test reports `PASS` or `FAIL`, confirming whether the SIMD SAD4 unit produces the expected result.
 
 ### 3. SAD on the Full CPU – Standard vs. Custom Instruction
 
@@ -234,7 +234,7 @@ This test demonstrates the processor's ability to **integrate and execute custom
    Before running a CPU testbench, update this file with the contents of the corresponding `.mem` program listed below.
 4. **Configure the SAD CPU Test:** When running [`tb_sad_cpu.sv`](testbenches/tb_sad_cpu.sv), set the `USE_CUSTOM_SAD` local parameter to match the selected program:
    - `1'b0` – Standard RV32I SAD implementation.
-   - `1'b1` – Custom SIMD SAD4 instructio.
+   - `1'b1` – Custom SIMD SAD4 instruction.
 5. **Run the Simulation:** Select **Run Behavioral Simulation** and inspect the simulation console for the test results. Restart the simulation after changing the memory contents or testbench configuration.
 
 
@@ -246,6 +246,7 @@ This test demonstrates the processor's ability to **integrate and execute custom
 | Custom SAD on CPU | `tb_sad_cpu` | [`SAD_Custom.mem`](testbenches/instruction_memory/SAD_Custom.mem) | `USE_CUSTOM_SAD = 1'b1` |
 
 > **Important:** The testbench selection **does not automatically change** which `.mem` file `$readmemh` loads. All supplied memory images contain byte values in little-endian order, one byte per memory entry.
+
 
 
 ## Repository Structure
@@ -272,7 +273,8 @@ RV32I-Single-Cycle-CPU/
 │   ├── assembly/               # Three source programs (.s)
 │   └── instruction_memory/     # Three byte-oriented images (.mem)
 └── docs/
-    ├── rv32i_encoding.png     
+    ├── rv32i_single_cycle_datapath.png
+    ├── rv32i_encoding.png
     ├── arithmetic_op.png
     ├── logical_op.png
     ├── branch_op.png
@@ -281,6 +283,7 @@ RV32I-Single-Cycle-CPU/
     ├── sad_standard_result.png
     └── sad_custom_result.png
 ```
+
 
 ## Summary
 
