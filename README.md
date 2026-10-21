@@ -101,6 +101,41 @@ The 7-bit `funct7` field is currently unused for custom instruction selection bu
 
 This design allows the processor to be extended with new specialized instructions while preserving the existing 32-bit instruction format.
 
+#### Instruction Example
+
+The following example illustrates the encoding of the implemented SAD4 instruction and its execution through the processor's datapath.
+
+```assembly
+# SAD x3, x1, x2
+.word 0x0020818B
+```
+**Complete 32-bit encoding:**
+
+```text
+0000000_00010_00001_000_00011_0001011
+                  ↓
+         0x0020818B
+```
+**Instruction Encoding:**
+
+| Bits | Field | Binary | Hex Value | Description |
+|---|---|---|---|---|
+| `[31:25]` | `funct7` | `0000000` | `0x00` | Unused in current decoding |
+| `[24:20]` | `rs2` | `00010` | `0x02` | Second operand (`x2`) |
+| `[19:15]` | `rs1` | `00001` | `0x01` | First operand (`x1`) |
+| `[14:12]` | `funct3` | `000` | `0x0` | Selects SAD4 |
+| `[11:7]` | `rd` | `00011` | `0x03` | Destination register (`x3`) |
+| `[6:0]` | `opcode` | `0001011` | `0x0B` | CUSTOM_0 |
+
+**Execution Flow:**
+
+1. **Fetch:** The instruction `0x0020818B` is fetched from Instruction Memory.
+2. **Decode:** The `CUSTOM_0` opcode is recognized, and the register addresses and `funct3` field are extracted.
+3. **Control:** The Control Unit identifies `funct3 = 000`, selects the SAD operation, and enables register writeback.
+4. **Register Read:** The values of `x1` and `x2` are read from the Register File.
+5. **Execute:** The ALU activates the SIMD SAD unit, which computes four absolute differences in parallel and sums them.
+6. **Writeback:** The 32-bit result is written to register `x3`.
+
 #### SIMD SAD4 Implementation
 
 As an example of a custom instruction, the processor implements **SIMD SAD4 (Sum of Absolute Differences)**, commonly used in image comparison, block matching, and motion estimation.
