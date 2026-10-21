@@ -57,7 +57,7 @@ The processor is organized into modular SystemVerilog components, each responsib
 | [`data_memory.sv`](rtl/data_memory.sv) | Supports byte, halfword, and word memory accesses |
 | [`rv32i_pkg.sv`](rtl/rv32i_pkg.sv) | Defines shared instruction opcodes, operation types, and control enumerations |
 
----
+
 
 ## Instruction Set
 
