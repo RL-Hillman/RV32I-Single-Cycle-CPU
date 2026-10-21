@@ -1,23 +1,12 @@
 # RV32I Single-Cycle CPU
 
-This project implements a **32-bit RISC-V processor** using
-**SystemVerilog**, based on the RV32I instruction set architecture.
+This project implements a **32-bit RISC-V processor** using **SystemVerilog**, based on the RV32I instruction set architecture.
 
-The processor follows a **single-cycle architecture**, executing
-each instruction within one clock cycle. Instruction processing
-is performed through combinational logic, while the processor's
-architectural state is updated at the active clock edge.
+The processor uses a **single-cycle architecture**, where each instruction is executed within a single clock cycle. The instruction is processed between clock edges, and the results are stored at the next rising edge.
 
-In addition to the supported RV32I instructions, the processor
-integrates a **custom four-lane SIMD Sum of Absolute Differences
-(SAD) instruction**, implemented as a dedicated hardware unit
-within the ALU.
+In addition to the supported RV32I instructions, the processor integrates a **custom four-lane SIMD Sum of Absolute Differences (SAD) instruction**, implemented as a dedicated hardware unit within the ALU.
 
-The project includes RISC-V assembly programs, pre-encoded
-instruction memory files, and SystemVerilog testbenches for
-functional verification, including sorting, statistical
-calculations, and a comparison between standard RV32I
-instructions and the custom SAD implementation.
+The project includes RISC-V assembly programs, pre-encoded instruction memory files, and SystemVerilog testbenches for functional verification, including sorting, statistical calculations, and a comparison between standard RV32I instructions and the custom SAD implementation.
 
 ## Key Features
 
