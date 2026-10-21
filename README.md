@@ -88,18 +88,13 @@ The processor supports arithmetic, logical operations, shifts, branches, jumps, 
 
 ### Custom Instructions
 
-The RV32I processor was extended to support custom instructions using the RISC-V **`CUSTOM_0` opcode (`0x0B`)**.
+The RV32I processor was extended using the RISC-V **`CUSTOM_0` opcode (`0x0B`)**, following the R-type instruction format with two source registers (`rs1`, `rs2`) and one destination register (`rd`).
 
-In this implementation, custom instructions follow the R-type instruction format, where `rs1` and `rs2` specify the source registers and `rd` specifies the destination register.
+The `funct3` field determines the custom operation:
+- `000`: SIMD SAD4 (implemented).
+- `001–111`: Reserved for future extensions.
 
-The `funct3` field is used to distinguish between custom operations:
-
-- `funct3 = 000`: SIMD SAD4 (implemented).
-- `funct3 = 001–111`: Reserved for future custom instructions.
-
-The 7-bit `funct7` field is currently unused for custom instruction selection but can be incorporated into the decoding logic to support additional operations in the future.
-
-This design allows the processor to be extended with new specialized instructions while preserving the existing 32-bit instruction format.
+The `funct7` field is currently unused for custom instruction selection but can support additional operations in the future, allowing further extensions without modifying the 32-bit instruction format.
 
 #### Instruction Example
 
@@ -109,7 +104,7 @@ The following example illustrates the encoding of the implemented SAD4 instructi
 # SAD x3, x1, x2
 .word 0x0020818B
 ```
-**Complete 32-bit encoding:**
+**32-bit Instruction Encoding:**
 
 ```text
 0000000_00010_00001_000_00011_0001011
