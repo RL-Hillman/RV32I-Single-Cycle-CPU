@@ -29,33 +29,63 @@ The processor is implemented as a **single-cycle datapath**, with its main compo
 
 During each clock cycle, the processor fetches an instruction, decodes it, reads the required operands, performs the operation, and determines the next program counter (`PC`). Depending on the instruction, the result may be written to the register file or stored in data memory.
 
-The architecture combines **combinational logic** for instruction processing with **sequential logic** for updating the processor's state at the rising clock edge.
+The processor uses **combinational logic** to execute instructions within each clock cycle, while **sequential logic** updates the architectural state at the rising clock edge.
 
 ### Architecture Overview
 
 ```mermaid
 flowchart LR
-    PC["Program Counter (PC)"] --> FETCH["Instruction Fetch"]
-    FETCH --> DECODE["Instruction Decode"]
-    DECODE --> RF["Register File"]
-    DECODE --> CTRL["Control Unit"]
+    PC["Program Counter (PC)"]
+    FETCH["Fetch"]
+    IMEM["Instruction Memory"]
+    DEC["Decode"]
+    CTRL["Control Unit"]
+    RF["Register File"]
+    IMM["Immediate"]
+    MUX["Operand MUXes"]
+    ALU["ALU + SIMD SAD"]
+    DMEM["Data Memory"]
+    WB["Writeback MUX"]
+    BR["Branch Control"]
+    NEXT["Next PC Selection"]
 
-    RF --> ALU["ALU + Custom SIMD SAD"]
+    PC --> FETCH
+    FETCH --> IMEM
+    IMEM --> FETCH
+    FETCH --> DEC
+
+    DEC --> CTRL
+    DEC --> RF
+    DEC --> IMM
+
+    RF --> MUX
+    IMM --> MUX
+    PC --> MUX
+    CTRL -.-> MUX
+
+    MUX --> ALU
     CTRL -.-> ALU
 
-    ALU --> DM["Data Memory"]
-    ALU --> WB["Writeback"]
-    DM --> WB
+    ALU --> DMEM
+    RF --> DMEM
+
+    ALU --> WB
+    DMEM --> WB
+    IMM --> WB
+    PC -->|"PC + 4"| WB
+    CTRL -.-> WB
     WB --> RF
 
-    RF --> BR["Branch Control"]
-    BR --> NEXT["Next PC Selection"]
+    RF --> BR
+    DEC -.-> BR
+    BR --> NEXT
     ALU --> NEXT
+    PC -->|"PC + 4"| NEXT
     CTRL -.-> NEXT
     NEXT --> PC
 ```
 
-*Simplified architectural overview. Control signals and selected datapath connections are omitted for clarity.*
+*Simplified datapath diagram based on `top.sv`. Solid arrows represent data paths, while dashed arrows represent control or instruction-decode information. Some internal connections are omitted for clarity.*
 
 ### RTL Modules
 
