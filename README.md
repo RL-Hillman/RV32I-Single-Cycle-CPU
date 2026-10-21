@@ -35,7 +35,7 @@ The processor uses **combinational logic** to execute instructions within each c
 
 ```mermaid
 flowchart LR
-    PC["Program Counter (PC)"]
+    PC["Program Counter"]
     FETCH["Fetch"]
     IMEM["Instruction Memory"]
     DEC["Decode"]
@@ -47,45 +47,46 @@ flowchart LR
     DMEM["Data Memory"]
     WB["Writeback MUX"]
     BR["Branch Control"]
-    NEXT["Next PC Selection"]
+    NEXT["Next PC MUX"]
 
-    PC --> FETCH
-    FETCH --> IMEM
-    IMEM --> FETCH
-    FETCH --> DEC
+    PC -->|"PC [31:0]"| FETCH
+    FETCH -->|"Address + Read Enable"| IMEM
+    IMEM -->|"Instruction [31:0]"| FETCH
+    FETCH -->|"Fetched Instruction"| DEC
 
-    DEC --> CTRL
-    DEC --> RF
-    DEC --> IMM
+    DEC -->|"Opcode, Funct, Type"| CTRL
+    DEC -->|"rs1, rs2, rd Addresses"| RF
+    DEC -->|"Immediate [31:0]"| IMM
 
-    RF --> MUX
-    IMM --> MUX
-    PC --> MUX
-    CTRL -.-> MUX
+    RF -->|"rs1 / rs2 Data"| MUX
+    IMM -->|"Immediate"| MUX
+    PC -->|"PC"| MUX
+    CTRL -.->|"Operand Select"| MUX
 
-    MUX --> ALU
-    CTRL -.-> ALU
+    MUX -->|"ALU Operands"| ALU
+    CTRL -.->|"ALU Operation"| ALU
 
-    ALU --> DMEM
-    RF --> DMEM
+    ALU -->|"Memory Address"| DMEM
+    RF -->|"Store Data (rs2)"| DMEM
+    CTRL -.->|"Memory Control"| DMEM
 
-    ALU --> WB
-    DMEM --> WB
-    IMM --> WB
+    ALU -->|"ALU Result"| WB
+    DMEM -->|"Load Data"| WB
+    IMM -->|"Immediate"| WB
     PC -->|"PC + 4"| WB
-    CTRL -.-> WB
-    WB --> RF
+    CTRL -.->|"Writeback Select / Enable"| WB
+    WB -->|"Write Data (rd)"| RF
 
-    RF --> BR
-    DEC -.-> BR
-    BR --> NEXT
-    ALU --> NEXT
+    RF -->|"rs1 / rs2 Data"| BR
+    DEC -.->|"Branch Type / Funct3"| BR
+    BR -->|"Branch Taken"| NEXT
+    ALU -->|"Target Address"| NEXT
     PC -->|"PC + 4"| NEXT
-    CTRL -.-> NEXT
-    NEXT --> PC
+    CTRL -.->|"Jump Select"| NEXT
+    NEXT -->|"Next PC"| PC
 ```
 
-*Simplified datapath diagram based on `top.sv`. Solid arrows represent data paths, while dashed arrows represent control or instruction-decode information. Some internal connections are omitted for clarity.*
+*The diagram illustrates the main datapath and control connections of the processor. Solid arrows represent data flow, while dashed arrows represent control signals. Some internal connections are omitted for clarity.*
 
 ### RTL Modules
 
