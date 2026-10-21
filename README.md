@@ -192,7 +192,9 @@ This test demonstrates the processor's ability to execute a complete program inv
 
 ### 2. SIMD SAD4 - standalone unit test
 
-[`tb_simd_sad4.sv`](testbenches/tb_simd_sad4.sv) exercises five cases: equal operands, the worked example, two maximum-difference orders, and a mixed-byte example. Expected results: `0`, `24`, `1020`, `1020`, and `40`. The test prints `PASS`/`FAIL` for each vector.
+[`tb_simd_sad4.sv`](testbenches/tb_simd_sad4.sv) independently verifies the functionality of the **SIMD SAD4 hardware unit**.
+The testbench checks that the unit correctly computes the sum of four absolute differences using five test cases: identical operands, a standard calculation example, maximum differences in both operand orders, and mixed-byte values.
+The expected results are `0`, `24`, `1020`, `1020`, and `40`, respectively. Each test reports `PASS` or `FAIL`, confirming whether the SIMD SAD4 unit produces the expected result
 
 ### 3. SAD on the Full CPU – Standard vs. Custom Instruction
 
