@@ -133,7 +133,7 @@ The following example illustrates the encoding of the implemented SAD4 instructi
 
 ## SIMD SAD4 Implementation
 
-As an example of a custom instruction, the processor implements **SIMD SAD4 (Sum of Absolute Differences)**, commonly used in image comparison, block matching, and motion estimation.
+As an example of a custom instruction, the processor implements **SIMD SAD4 (Sum of Absolute Differences)**, using **SIMD (Single Instruction, Multiple Data)** to perform four parallel 8-bit absolute difference calculations within a single instruction. This operation is commonly used in image comparison, block matching, and motion estimation.
 
 Two 32-bit registers each contain four **unsigned 8-bit values**. The dedicated hardware computes four absolute differences **in parallel**:
 
