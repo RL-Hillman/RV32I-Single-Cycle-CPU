@@ -284,9 +284,9 @@ RV32I-Single-Cycle-CPU/
 
 This project demonstrates the design and implementation of a **32-bit single-cycle RISC-V processor** in SystemVerilog, supporting arithmetic, logical, memory, and control-flow operations.
 
-The processor was verified through SystemVerilog testbenches, demonstrating its ability to execute complete assembly programs, perform sorting and statistical calculations, and support custom hardware instructions.
+The processor was verified through SystemVerilog testbenches, demonstrating its ability to execute complete assembly programs, perform sorting and statistical calculations, and execute custom hardware instructions.
 
-The integration of the **SIMD SAD4 instruction** demonstrates the flexibility of the architecture, reducing the calculation from **23 instruction cycles to just 1 cycle** compared to the standard RV32I implementation.
+The integration of the **SIMD SAD4 custom instruction** highlights the architecture's extensibility, enabling a computation that requires **23 clock cycles using standard RV32I instructions to be completed in a single clock cycle**.
 
-The processor's modular architecture and extensible custom-instruction design provide a foundation for future enhancements, including additional custom instructions and specialized hardware accelerators.
+The processor's modular design provides a foundation for future enhancements, including additional custom instructions and specialized hardware accelerators.
 
