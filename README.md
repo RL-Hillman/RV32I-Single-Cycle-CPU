@@ -24,7 +24,7 @@ The project includes RISC-V assembly programs, pre-encoded instruction memory fi
 
 ## Processor Architecture
 
-The processor is implemented as a **single-cycle datapath**, with its main components integrated in [`top.sv`](rtl/top.sv).
+The processor is implemented as a **single-cycle datapath**, with its main components integrated in `top.sv`.
 
 During each clock cycle, the processor fetches an instruction, decodes it, reads the required operands, performs the operation, and determines the next program counter (`PC`). Depending on the instruction, the result may be written to the register file or stored in data memory.
 
