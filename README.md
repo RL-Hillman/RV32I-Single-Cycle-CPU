@@ -147,9 +147,7 @@ $$
 \mathrm{SAD4} = (d_0 + d_1) + (d_2 + d_3)
 $$
 
-This structure allows the two intermediate sums to be calculated simultaneously, reducing the addition depth from three levels to two compared to a serial addition chain.
-
-The adder tree was chosen to **minimize the combinational delay**, helping the complete SAD4 operation meet the timing requirements of the single-cycle processor.
+The first level computes two partial sums in parallel, while the second level combines them into the final result. This balanced structure reduces the addition depth from three stages to two, **minimizing combinational delay** and improving timing efficiency within the single-cycle datapath.
 
 ```mermaid
 flowchart TB
