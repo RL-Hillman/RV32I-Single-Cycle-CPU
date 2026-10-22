@@ -207,7 +207,7 @@ Both programs use identical input operands, allowing the testbench to verify the
 | [![Standard RV32I SAD simulation](docs/sad_standard_result.png)](docs/sad_standard_result.png) | [![Custom SAD CPU simulation](docs/sad_custom_result.png)](docs/sad_custom_result.png) |
 | **23 cycles** | **1 cycle** |
 
-The custom instruction reduces the calculation from **23 cycles to just 1 cycle**, achieving a **23× reduction in instruction cycles (95.7% fewer cycles)** while producing the same result.
+The custom SIMD SAD4 instruction completes the calculation in **a single clock cycle**, compared to **23 clock cycles** using standard RV32I instructions, achieving a **95.7% reduction in cycle count** while producing the same result.
 
 This test demonstrates the processor's ability to **integrate and execute custom instructions within its existing single-cycle datapath**, enabling application-specific hardware acceleration while maintaining correct execution.
 
