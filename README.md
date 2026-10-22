@@ -68,7 +68,7 @@ Each instruction is 32 bits wide and contains fields such as the opcode, registe
 The following diagram illustrates the instruction formats and their binary encodings, including the custom SAD4 instruction.
 
 <p align="center">
-  <a href="docs/rv32i_encoding.png">
+  <a href="docs/rv32i_encoding.jpg">
     <img src="docs/rv32i_encoding.jpg" alt="RV32I instruction encodings and field layouts" width="760">
   </a>
 </p>
