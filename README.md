@@ -232,8 +232,8 @@ This test demonstrates the processor's ability to **integrate and execute custom
 
    Before running a CPU testbench, update this file with the contents of the corresponding `.mem` program listed below.
 4. **Configure the SAD CPU Test:** When running `tb_sad_cpu.sv`, set the `USE_CUSTOM_SAD` local parameter to match the selected program:
-   - `1'b0` – Standard RV32I SAD implementation.
-   - `1'b1` – Custom SIMD SAD4 instruction.
+   - `1'b0` - Standard RV32I SAD implementation.
+   - `1'b1` - Custom SIMD SAD4 instruction.
 5. **Run the Simulation:** Select **Run Behavioral Simulation** and inspect the simulation console for the test results. Restart the simulation after changing the memory contents or testbench configuration.
 
 
