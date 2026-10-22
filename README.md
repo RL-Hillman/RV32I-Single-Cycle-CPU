@@ -273,7 +273,7 @@ RV32I-Single-Cycle-CPU/
 │   └── instruction_memory/     # Three byte-oriented images (.mem)
 └── docs/
     ├── rv32i_single_cycle_datapath.png
-    ├── rv32i_encoding.png
+    ├── rv32i_encoding.jpg
     ├── arithmetic_op.png
     ├── logical_op.png
     ├── branch_op.png
