@@ -177,7 +177,7 @@ The repository includes three SystemVerilog testbenches for functional verificat
 
 **Before running a CPU testbench, ensure that Instruction Memory is loaded with the corresponding `.mem` file.** The standalone SIMD SAD unit testbench does not require a machine-code file.
 
-### 1. Bubble Sort and Statistics – CPU Test
+### 1. Bubble Sort and Statistics - CPU Test
 
 [`tb_sort_and_statistics.sv`](testbenches/tb_sort_and_statistics.sv) executes the [`Sort and Statistics.s`](testbenches/assembly/Sort%20and%20Statistics.s) program, which sorts eight integers in ascending order and calculates their minimum, maximum, sum, and positive count.
 
@@ -196,7 +196,7 @@ The testbench checks that the unit correctly computes the sum of four absolute d
 
 The expected results are `0`, `24`, `1020`, `1020`, and `40`, respectively. Each test reports `PASS` or `FAIL`, confirming whether the SIMD SAD4 unit produces the expected result.
 
-### 3. SAD on the Full CPU – Standard vs. Custom Instruction
+### 3. SAD on the Full CPU - Standard vs. Custom Instruction
 
 [`tb_sad_cpu.sv`](testbenches/tb_sad_cpu.sv) compares two implementations of the same SAD4 calculation: one using standard RV32I instructions and the other using the custom SIMD SAD4 instruction.
 
