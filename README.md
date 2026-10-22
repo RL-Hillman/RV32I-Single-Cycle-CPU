@@ -222,7 +222,7 @@ This test demonstrates the processor's ability to **integrate and execute custom
 
 1. **Add Design Sources:** Add all SystemVerilog files from [`rtl/`](rtl/) to **Design Sources**.
 2. **Add Simulation Sources:** Add the testbench files from [`testbenches/`](testbenches/) to **Simulation Sources** and select the appropriate module as the simulation top.
-3. **Configure Instruction Memory:** The [`Instruction_Memory.sv`](rtl/Instruction_Memory.sv) module loads its instructions using:
+3. **Configure Instruction Memory:** The `Instruction_Memory.sv` module loads its instructions using:
 
    ```systemverilog
    $readmemh("instruction_memory.mem", memory);
@@ -231,7 +231,7 @@ This test demonstrates the processor's ability to **integrate and execute custom
    Add a file named `instruction_memory.mem` under **Simulation Sources → Memory File** in Vivado.
 
    Before running a CPU testbench, update this file with the contents of the corresponding `.mem` program listed below.
-4. **Configure the SAD CPU Test:** When running [`tb_sad_cpu.sv`](testbenches/tb_sad_cpu.sv), set the `USE_CUSTOM_SAD` local parameter to match the selected program:
+4. **Configure the SAD CPU Test:** When running `tb_sad_cpu.sv`, set the `USE_CUSTOM_SAD` local parameter to match the selected program:
    - `1'b0` – Standard RV32I SAD implementation.
    - `1'b1` – Custom SIMD SAD4 instruction.
 5. **Run the Simulation:** Select **Run Behavioral Simulation** and inspect the simulation console for the test results. Restart the simulation after changing the memory contents or testbench configuration.
@@ -239,10 +239,10 @@ This test demonstrates the processor's ability to **integrate and execute custom
 
 | Test | Simulation top | Memory image | Testbench setting |
 |---|---|---|---|
-| Sort & statistics | `tb_sort_and_statistics` | [`sort_and_statistics.mem`](testbenches/instruction_memory/sort_and_statistics.mem) | none |
+| Sort & statistics | `tb_sort_and_statistics` | `sort_and_statistics.mem` | none |
 | Standalone SIMD | `tb_simd_sad` | **Not required** | none |
-| Standard SAD on CPU | `tb_sad_cpu` | [`SAD_Standard.mem`](testbenches/instruction_memory/SAD_Standard.mem) | `USE_CUSTOM_SAD = 1'b0` |
-| Custom SAD on CPU | `tb_sad_cpu` | [`SAD_Custom.mem`](testbenches/instruction_memory/SAD_Custom.mem) | `USE_CUSTOM_SAD = 1'b1` |
+| Standard SAD on CPU | `tb_sad_cpu` | `SAD_Standard.mem` | `USE_CUSTOM_SAD = 1'b0` |
+| Custom SAD on CPU | `tb_sad_cpu` | `SAD_Custom.mem` | `USE_CUSTOM_SAD = 1'b1` |
 
 > **Important:** The testbench selection **does not automatically change** which `.mem` file `$readmemh` loads. All supplied memory images contain byte values in little-endian order, one byte per memory entry.
 
