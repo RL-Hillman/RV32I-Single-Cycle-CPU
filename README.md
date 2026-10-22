@@ -254,8 +254,8 @@ This test demonstrates the processor's ability to **integrate and execute custom
 RV32I-Single-Cycle-CPU/
 ├── README.md
 ├── rtl/
-│   ├── top.sv                  # Processor integration
-│   ├── rv32i_pkg.sv            # Shared types and opcodes
+│   ├── top.sv                  
+│   ├── rv32i_pkg.sv            
 │   ├── fetch.sv
 │   ├── Instruction_Memory.sv
 │   ├── Decode.sv
