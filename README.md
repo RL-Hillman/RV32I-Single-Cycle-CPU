@@ -69,7 +69,7 @@ The following diagram illustrates the instruction formats and their binary encod
 
 <p align="center">
   <a href="docs/rv32i_encoding.png">
-    <img src="docs/rv32i_encoding.png" alt="RV32I instruction encodings and field layouts" width="760">
+    <img src="docs/rv32i_encoding.jpg" alt="RV32I instruction encodings and field layouts" width="760">
   </a>
 </p>
 
