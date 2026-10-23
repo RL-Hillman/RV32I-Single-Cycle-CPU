@@ -32,7 +32,9 @@ module tb_sort_and_statistics;
     // --------------------------------------------------------
     top dut (
         .clk     (clk),
-        .reset_n (reset_n)
+        .reset_n (reset_n),
+        .debug_sel (3'd0),
+        .debug_data ()
     );
 
 
