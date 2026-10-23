@@ -296,7 +296,9 @@ RV32I-Single-Cycle-CPU/
     ├── load_store.png
     ├── sort_statistics_result.png
     ├── sad_standard_result.png
-    └── sad_custom_result.png
+    ├── sad_custom_result.png
+    └── timing_summary.png
+
 ```
 
 
@@ -307,6 +309,8 @@ This project demonstrates the design and implementation of a **32-bit single-cyc
 The processor was verified through SystemVerilog testbenches, demonstrating its ability to execute complete assembly programs, perform sorting and statistical calculations, and execute custom hardware instructions.
 
 The integration of the **SIMD SAD4 custom instruction** highlights the architecture's extensibility, enabling a computation that requires **23 clock cycles using standard RV32I instructions to be completed in a single clock cycle**.
+
+Post-implementation timing analysis confirmed that the processor successfully meets the **40 MHz clock constraint**, with positive setup and hold slack and no timing violations on constrained paths.
 
 The processor's modular design provides a foundation for future enhancements, including additional custom instructions and specialized hardware accelerators.
 
