@@ -242,7 +242,26 @@ This test demonstrates the processor's ability to **integrate and execute custom
 
 > **Important:** The testbench selection **does not automatically change** which `.mem` file `$readmemh` loads. All supplied memory images contain byte values in little-endian order, one byte per memory entry.
 
+## Implementation and Timing Analysis
 
+Post-implementation Static Timing Analysis (STA) confirmed that the processor successfully meets the **40 MHz clock constraint (25 ns period)**, with positive setup and hold slack and no timing violations on constrained paths.
+
+### Timing Results
+
+| Parameter | Result |
+|---|---|
+| Clock Frequency | **40 MHz** |
+| Clock Period | 25.000 ns |
+| Worst Negative Slack (WNS) | +0.836 ns |
+| Worst Hold Slack (WHS) | +0.313 ns |
+| Setup / Hold Violations | 0 |
+| Timing Status | **All specified constraints met** |
+
+### Vivado Timing Report
+
+![Vivado Timing Summary - 40 MHz](docs/timing_summary.png)
+
+> **Note:** To support synthesis and timing analysis, debug ports were added to `top.sv` to expose internal signals and prevent the relevant logic from being optimized away. This was necessary to obtain meaningful timing results for the implemented processor.
 
 ## Repository Structure
 
