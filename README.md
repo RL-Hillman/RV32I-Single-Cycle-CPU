@@ -211,6 +211,7 @@ This test demonstrates the processor's ability to **integrate and execute custom
 - Set the `USE_CUSTOM_SAD` local parameter in the testbench to select the corresponding measurement configuration.
 - Load the matching `.mem` program into Instruction Memory before running the simulation.
 - Cycle measurements cover only the SAD calculation, excluding operand initialization.
+
   
 ## Implementation and Timing Analysis
 
