@@ -1,14 +1,16 @@
 // --------------------------------------------------------
 // Top-Level RISC-V Processor (RV32I Single-Cycle)
 // --------------------------------------------------------
-`default_nettype none
 
 import rv32i_pkg::*;
 
 module top 
 (
-    input wire logic clk,
-    input wire logic reset_n
+    input  logic clk,
+    input  logic reset_n,
+    input  logic [2:0]  debug_sel,
+    output logic [31:0] debug_data
+    
 );
 
     // ========================================================
@@ -320,5 +322,21 @@ module top
         .dmem_read_data   (dmem_read_data)
     );
 
+    
+    always_comb begin
+        case (debug_sel)
+            3'd0: debug_data = pc;
+            3'd1: debug_data = fetched_instruction;
+            3'd2: debug_data = alu_res;
+            3'd3: debug_data = rf_wr_data;
+            3'd4: debug_data = dmem_read_data;
+            3'd5: debug_data = rs1_data;
+            3'd6: debug_data = rs2_data;
+            3'd7: debug_data = next_pc;
+            default: debug_data = 32'd0;
+        endcase
+    end
+
+   
+
 endmodule
-`default_nettype wire
