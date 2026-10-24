@@ -207,12 +207,6 @@ The custom SIMD SAD4 instruction completes the calculation in **a single clock c
 
 This test demonstrates the processor's ability to **integrate and execute custom instructions within its existing single-cycle datapath**, enabling application-specific hardware acceleration while maintaining correct execution.
 
-**Test Configuration:**
-- Set the `USE_CUSTOM_SAD` local parameter in the testbench to select the corresponding measurement configuration.
-- Load the matching `.mem` program into Instruction Memory before running the simulation.
-- Cycle measurements cover only the SAD calculation, excluding operand initialization.
-
-  
 ## Implementation and Timing Analysis
 
 Post-implementation Static Timing Analysis (STA) confirmed that the processor successfully meets the **40 MHz clock constraint (25 ns period)**, with positive setup and hold slack and no timing violations on constrained paths.
